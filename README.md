@@ -1,5 +1,4 @@
 This repository is contains the notes, work, and code that I put together to complete the final project for CSE291-K00 at UCSD given during winter quarter 2020.
-Hopefully these notes can
 
 ## Problem statement
 The full problem statement is currently a living document and can be found on [Google Drive](https://docs.google.com/document/d/1nAF2tlBQOE3nhYV2yUQvsYLTYAmCpHDPv9vuqLhWXrU/edit?usp=sharing).
