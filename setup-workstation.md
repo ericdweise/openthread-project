@@ -82,7 +82,6 @@ GNU_PREFIX = arm-none-eabi
 - [Documentation](https://infocenter.nordicsemi.com/topic/struct_sdk/struct/sdk_thread_zigbee_latest.html)
 
 
-
 # User Permissions
 Make sure your user has permission to access serial port
 ```bash
