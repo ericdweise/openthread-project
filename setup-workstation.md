@@ -116,21 +116,3 @@ Make sure your user has permission to access serial port
 ```bash
 sudo adduser <USER> dialout
 ```
-
-
-# Things I read about that haven't been used (yet)
-
-## Segger Embeded Studio
-[Download Page](https://www.segger.com/downloads/embedded-studio)
-
-
-## Segger J-Link
-[Download Page](https://www.segger.com/downloads/jlink)
-Required for Nordic Topology Monitor
-
-
-
-## nRF Sniffer for 802.15.4
-For learning and debugging 802.15.4 protocols.
-Used to troubleshoot connections in the network.
-[Download]()
