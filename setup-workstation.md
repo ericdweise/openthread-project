@@ -13,9 +13,9 @@ Linux REMOVED 4.9.0-12-amd64 #1 SMP Debian 4.9.210-1 (2020-01-20) x86_64 GNU/Lin
 Packages that can be installed by aptitude:
 - GCC
 - libgconf
-
+- screen
 ```bash
-sudo apt install -y gcc libgconf-2-4
+sudo apt install -y gcc libgconf-2-4 screen
 ```
 
 ## Install Docker
@@ -29,29 +29,37 @@ sudo dpkg --force-overwrite -i JLink_Linux_*.deb
 
 
 ## GNU ARM Embedded Toolchain
-[Download Page](https://developer.arm.com/tools-and-software/open-source-software/developer-tools/gnu-toolchain/gnu-rm/downloads)
-1. Download package
-2. Unzip using `tar -xjvf`
-3. Add binaries to the PATH variable. I added this line to my zshrc file.
+1. [Download package](https://developer.arm.com/tools-and-software/open-source-software/developer-tools/gnu-toolchain/gnu-rm/downloads)
+1. Decompress
   ```bash
-  export PATH=$PATH:<INSTALL_DIR>/gcc-arm-none-eabi-*/bin
+  tar -xjvf gcc-arm-none-eabi-*.tar.bz2
   ```
-4. Test installation with the command `arm-none-eabi-gcc`
+1. Copy binaries to `/opt`
+  ```bash
+  sudo mkdir -p /opt/gnu-mcu-eclipse/
+  sudo cp -r gcc-arm-none-eabi*/ /opt/gnu-mcu-eclipse/arm-none-eabi-gcc/
+  ```
+1. Add binaries to the PATH variable
+  ```bash
+  # For scripts that define #!/bin/bash
+  echo 'PATH="$PATH:/opt/gnu-mcu-eclipse/arm-none-eabi-gcc/bin"' >> ~/.bashrc
+  source ~/.bashrc
+  ```
+1. Test installation: `which arm-none-eabi-gcc`
 
 ### Notes
-In the Linux download instructions are stored in `share/doc/gcc-arm-none-eabi/readme.txt`
+In the Linux download instructions are stored in the archive under `share/doc/gcc-arm-none-eabi/readme.txt`.
 
 
-## nRF Command Line tools _and_ JLink
+## nRF Command Line tools
 1. [Download](https://www.nordicsemi.com/Software-and-tools/Development-Tools/nRF-Command-Line-Tools/Download#infotabs)
-2. unzip (`tar -xzvf`)
-3. Install JLink
+2. decompress
+  ```bash
+  tar -xzvf nRF-Command-Line-Tools*
   ```
-  sudo dpkg -i --force-overwrite JLink_Linux_V660e_x86_64.deb
+3. Install nRFTools
   ```
-4. Install nRFTools
-  ```
-  sudo dpkg -i --force-overwrite nRF-Command-Line-Tools_10_6_0_Linux-amd64.deb
+  sudo dpkg -i --force-overwrite nRF-Command-Line-Tools_*.deb
   ```
 
 
