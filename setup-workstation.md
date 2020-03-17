@@ -18,6 +18,15 @@ Packages that can be installed by aptitude:
 sudo apt install -y gcc libgconf-2-4
 ```
 
+## Install Docker
+
+
+## Install SEGGER JLink
+Download the .deb file from the SEGGER [download page](https://www.segger.com/downloads/jlink/#J-LinkSoftwareAndDocumentationPack)
+```bash
+sudo dpkg --force-overwrite -i JLink_Linux_*.deb
+```
+
 
 ## GNU ARM Embedded Toolchain
 [Download Page](https://developer.arm.com/tools-and-software/open-source-software/developer-tools/gnu-toolchain/gnu-rm/downloads)
