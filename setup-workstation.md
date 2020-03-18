@@ -1,9 +1,9 @@
 Here is the software I used to provision and interact with the Nordic nRF52840 SoCs.
 
-Note, I am running Debian 9.0 on an Acer Cloudbook
+Note, I am running Ubuntu 18.04 on a Lenovo IdeaPad
 ```
 $ uname -a
-Linux REMOVED 4.9.0-12-amd64 #1 SMP Debian 4.9.210-1 (2020-01-20) x86_64 GNU/Linux
+Linux ideapad 5.3.0-42-generic #34~18.04.1-Ubuntu SMP Fri Feb 28 13:42:26 UTC 2020 x86_64 x86_64 x86_64 GNU/Linux
 ```
 
 
@@ -14,8 +14,9 @@ Packages that can be installed by aptitude:
 - GCC
 - libgconf
 - screen
+- libreadline
 ```bash
-sudo apt install -y gcc libgconf-2-4 screen
+sudo apt install -y gcc libgconf-2-4 screen libreadline-dev
 ```
 
 ## Install Docker
@@ -134,9 +135,15 @@ cd openthread
 cd ~/repositories
 git clone --recursive https://github.com/openthread/wpantund.git
 cd wpantund
-./script/bootstrap
+git checkout full/latest-release
+
+# Read INSTALL.md for up to date instructions
+sudo apt install -y dbus libreadline
+sudo apt install -y gcc g++ libdbus-1-dev libboost-dev libreadline-dev
+sudo apt install -y libtool autoconf autoconf-archive
+
 ./bootstrap.sh
-./configure
+./configure --sysconfdir=/etc
 make
 sudo make install
 ```
