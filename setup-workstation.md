@@ -114,5 +114,31 @@ GNU_PREFIX = arm-none-eabi
 # User Permissions
 Make sure your user has permission to access serial port
 ```bash
-sudo adduser <USER> dialout
+sudo adduser $(whoami) dialout
+
+
+# Clone Repositories
+```bash
+if ! [ -d ~/repositories ]; then
+  mkdir ~/repositories/
+fi
+
+# Clone openthread
+cd ~/repositories
+git clone --recursive https://github.com/openthread/openthread.git
+cd openthread
+./script/bootstrap
+./bootstrap
+
+# Clone wpantund
+cd ~/repositories
+git clone --recursive https://github.com/openthread/wpantund.git
+cd wpantund
+./script/bootstrap
+./bootstrap.sh
+./configure
+make
+sudo make install
+```
+Now reboot your system: `sudo reboot`
 ```
