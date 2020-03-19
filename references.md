@@ -13,7 +13,6 @@ The page with all code labs can be found [here](https://openthread.io/guides).
 Below are the labs I found useful.
 
 ### [Border Router with Docker](https://openthread.io/guides#border_router_with_docker)
-I plan on using the docker container as the border router in the experiments.
 
 
 ### [Hardware Code Lab](https://openthread.io/guides#hardware_codelab)
@@ -53,17 +52,15 @@ Technical documentation published by Nordic.
 
 [API Reference](https://infocenter.nordicsemi.com/topic/sdk_tz_v4.0.0/index.html)
 
-[]()
-
-[]()
-
-[]()
-
-
 
 ### [Nordic Topology Monitor](https://www.nordicsemi.com/Software-and-Tools/Development-Tools/nRF-Thread-topology-monitor)
 Used to monitor the toplogy of thread networks in real time.
 
 
 ## Guides
-[]()
+The project relied heavily on two examples published by Nordic Semiconductor.
+
+The border router was built following these [instructions](https://infocenter.nordicsemi.com/topic/com.nordic.infocenter.thread_zigbee.v3.0.0/thread_border_router.html)
+
+
+The other nodes were built following the [NCP/RCP Example](https://infocenter.nordicsemi.com/topic/com.nordic.infocenter.thread_zigbee.v3.0.0/thread_ncp_rcp_example.html)
