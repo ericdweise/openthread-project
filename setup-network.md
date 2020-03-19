@@ -26,7 +26,7 @@ arm-none-eabi-objcopy -O ihex output/nrf52840/bin/ot-ncp-ftd output/nrf52840/bin
 
 ## Flash Development Kit
 
-1. Plug the Dev. Kit into workstation using microusb cable. Use the USB port on the short end of the Dev. Kit
+1. Plug the Dev. Kit into workstation using microusb cable. Use the USB port on the **short end** of the Dev. Kit
 1. Switch the poser supply to "VDD" on the Dev. Kit (SW9)
 1. Switch the Dev Kit "ON"
 1. Find the Device Serial Number on the top of the Dev Kit.
@@ -35,6 +35,9 @@ arm-none-eabi-objcopy -O ihex output/nrf52840/bin/ot-ncp-ftd output/nrf52840/bin
 ```bash
 nrfjprog -f nrf52 -s <DEVICE_SERIAL_NUMBER> --chiperase --program  output/nrf52840/bin/ot-ncp-ftd.hex --reset
 ```
+
+## Unplug the Dev Kit
+You will need to plug it back in **using the other microusb port** later.
 
 
 # Border Router
@@ -47,25 +50,28 @@ nrfjprog -f nrf52 -s <DEVICE_SERIAL_NUMBER> --chiperase --program  output/nrf528
     Use the Physical NCP instructions
 - [Running the Docker Container](https://openthread.io/guides/border-router/docker/run)
 
+## Steps
 ### Pull Container
 ```bash
 sudo docker pull openthread/otbr:latest
 ```
 
-### Build container
-This is necessary because the wpantund.conf file is incorrect in the
-
-Make sure to run this command from the same directory as this MarkDown file.
-
+### Attach Dev Kit
+Plug the microusb cable into the **long side** of the Dev Kit.
+Make sure that the serial port attaches correctly:
 ```bash
-sudo docker build -f DockerfileOtbr -t my-otbr .
+ls -l /dev/tty* | grep ACM
 ```
+should return
+```
+crw-rw----  1 root  dialout 166,     0 Mar 19 16:34 ttyACM0
+```
+If it is a directory you need to unplug the device and delete ttyACM0
 
 ### Run
 To connect the NCP you mount the correct shell to the Docker container as a shared volume.
 The shell should be something like `/dev/ttyACM[0-9]`, but might be different on different distros.
 For example, on my Debian 9.0 computer the shell is `/dev/ttyS[0-9]`.
-To find which device file to use run `ls /dev/tty*` twice, once with the NCP plugged in and once with it removed.
 
 ```bash
 sudo docker run --sysctl "net.ipv6.conf.all.disable_ipv6=0 \
@@ -76,6 +82,14 @@ sudo docker run --sysctl "net.ipv6.conf.all.disable_ipv6=0 \
     --privileged openthread/otbr \
     --ncp-path /dev/ttyACM0
 ```
+
+
+### Did It Work?
+If you see the following printed to STDOUT:
+```
+otbr-agent[221]: Border router agent started.
+```
+Then it worked!
 
 
 
