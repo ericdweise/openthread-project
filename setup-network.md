@@ -37,20 +37,45 @@ nrfjprog -f nrf52 -s <DEVICE_SERIAL_NUMBER> --chiperase --program  output/nrf528
 ```
 
 
-# Base Station
+# Border Router
 - Docker container running on workstation
+- Instructions and overview can be found [here](https://openthread.io/guides/border-router/docker)
+- Instructions on running Docker and NCP as full Base Station found [here]()
 
 ## References
-- [OpenThread Border Router Guide](https://openthread.io/guides/border-router/docker/run).
+- [OpenThread Border Router Guide](https://openthread.io/guides/border-router/docker).
     Use the Physical NCP instructions
+- [Running the Docker Container](https://openthread.io/guides/border-router/docker/run)
 
-## Build
-1. step 1
+### Pull Container
+```bash
+sudo docker pull openthread/otbr:latest
+```
 
-## Attach NCP
+### Build container
+This is necessary because the wpantund.conf file is incorrect in the
 
-## Run
-1. step 1
+Make sure to run this command from the same directory as this MarkDown file.
+
+```bash
+sudo docker build -f DockerfileOtbr -t my-otbr .
+```
+
+### Run
+To connect the NCP you mount the correct shell to the Docker container as a shared volume.
+The shell should be something like `/dev/ttyACM[0-9]`, but might be different on different distros.
+For example, on my Debian 9.0 computer the shell is `/dev/ttyS[0-9]`.
+To find which device file to use run `ls /dev/tty*` twice, once with the NCP plugged in and once with it removed.
+
+```bash
+sudo docker run --sysctl "net.ipv6.conf.all.disable_ipv6=0 \
+    net.ipv4.conf.all.forwarding=1 \
+    net.ipv6.conf.all.forwarding=1" \
+    -p 8080:80 --dns=127.0.0.1 -it --rm \
+    --volume /dev/ttyACM0:/dev/ttyACM0 \
+    --privileged openthread/otbr \
+    --ncp-path /dev/ttyACM0
+```
 
 
 
