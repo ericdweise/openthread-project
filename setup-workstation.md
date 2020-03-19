@@ -60,7 +60,7 @@ sudo dpkg --force-overwrite -i JLink_Linux_*.deb
   ```
 1. Test installation: `which arm-none-eabi-gcc`
 
-### Notes
+### Note
 In the Linux download instructions are stored in the archive under `share/doc/gcc-arm-none-eabi/readme.txt`.
 
 
@@ -116,6 +116,7 @@ GNU_PREFIX = arm-none-eabi
 Make sure your user has permission to access serial port
 ```bash
 sudo adduser $(whoami) dialout
+```
 
 
 # Clone Repositories
@@ -148,4 +149,3 @@ make
 sudo make install
 ```
 Now reboot your system: `sudo reboot`
-```
