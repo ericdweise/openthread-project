@@ -1,6 +1,66 @@
 How to configure devices and set up the network
 
 
+
+# Routing Candidate Nodes
+- Use the nRF52840 Dongle
+- Every node will be put programmed as a Full Thread Device (FTD)
+- Here I use the 'cli' example provided by OpenThread
+
+## References
+- [Programming the nRF52840 Dongle](https://infocenter.nordicsemi.com/topic/ug_nrf52840_dongle/UG/nrf52840_Dongle/programming.html)
+- [nRF52840 Dongle User Guide](https://infocenter.nordicsemi.com/pdf/nRF52840_Dongle_User_Guide_v1.1.pdf)
+- [Nordic Tutorial on Programming Dongle](https://devzone.nordicsemi.com/nordic/short-range-guides/b/getting-started/posts/nrf52840-dongle-programming-tutorial)
+
+## Compile
+1. Change to the OpenThread Repository
+```bash
+cd ~/repositories/openthread/
+```
+1. Compile a USB, Joiner node
+```bash
+make -f examples/Makefile-nrf52840 clean
+make -f examples/Makefile-nrf52840 JOINER=1 USB=1 BOOTLOADER=USB
+```
+
+## Convert Binary to .hex
+```bash
+arm-none-eabi-objcopy -O ihex output/nrf52840/bin/ot-cli-ftd output/nrf52840/bin/ot-cli-ftd.hex
+```
+
+## Flash with nrfjprog
+1. Plug the dongle into your workstation.
+Make sure that no other devices are plugged in.
+Otherwise you will need to determine which tty shell is connected to the Dongle.
+1. Press the Reset Button.
+The Red LED should start pulsing slowly.
+The following steps assume it is `/dev/ttyACM0`
+1.
+
+## Flash with nRF Connect
+### NOTE
+I didn't get this to work.
+My nRF Connect wouldn't read the Dongle.
+See **Flash with nrfjprog** instead.
+
+Flashing has to be done using the
+1. Plug the dongle into your workstation.
+Make sure that no other devices are plugged in.
+Otherwise you will need to determine which tty shell is connected to the Dongle.
+1. Press the Reset Button.
+The Red LED should start pulsing slowly.
+The following steps assume it is `/dev/ttyACM0`
+1. Open the nRF Connect "Programmer" App.
+1. "Select Device" (upper left of the window).
+It can take a few minutes for the Programmer to read the device memory.
+Let it sit until the
+1. "Add HEX file" (menu on the right)
+
+## Operation
+1. plug into usb power and wait...?
+
+
+
 # Network Co-Processor (NCP) Using the Dev. Kit
 - nRF52840 Development Kit
 - Must be attached to workstation using USB during operation
@@ -83,35 +143,9 @@ sudo docker run --sysctl "net.ipv6.conf.all.disable_ipv6=0 \
     --ncp-path /dev/ttyACM0
 ```
 
-
 ### Did It Work?
 If you see the following printed to STDOUT:
 ```
 otbr-agent[221]: Border router agent started.
 ```
 Then it worked!
-
-
-
-# Routing Candidate Nodes
-- nRF52840 Dongle
-
-## Compile
-1. step 1
-```bash
-make -f examples/Makefile-nrf52840 clean
-make -f examples/Makefile-nrf52840 JOINER=1 USB=1 BOOTLOADER=USB
-```
-
-## Convert Binary to .hex
-```bash
-# is right??? arm-none-eabi-objcopy -O ihex output/nrf52840/bin/ot-cli-ftd output/nrf52840/bin/ot-cli-ftd.hex
-```
-
-## Flash
-```bash
-nrfjprog -f nrf52 --chiperase --program output/nrf52840/bin/ot-cli-ftd.hex --reset
-```
-
-## Operation
-1. plug into usb power and wait...
