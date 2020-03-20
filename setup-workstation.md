@@ -15,8 +15,30 @@ Packages that can be installed by aptitude:
 - libgconf
 - screen
 - libreadline
+- DTC
 ```bash
-sudo apt install -y gcc libgconf-2-4 screen libreadline-dev
+sudo apt install -y \
+    gcc \
+    cmake \
+    libgconf-2-4 \
+    screen \
+    libreadline-dev \
+    device-tree-compiler \
+    gcc-multilib \
+    git \
+    wget \
+    ninja-build \
+    gperf \
+    ccache \
+    dfu-util \
+    python3-pip \
+    python3-setuptools \
+    python3-wheel \
+    xz-utils \
+    file \
+    make \
+    gcc-multilib
+
 ```
 
 ## Install Docker
@@ -47,15 +69,15 @@ sudo dpkg --force-overwrite -i JLink_Linux_*.deb
   ```bash
   tar -xjvf gcc-arm-none-eabi-*.tar.bz2
   ```
-1. Copy binaries to `/opt`
+1. Copy binaries to `/opt/gnuarmemb`
   ```bash
-  sudo mkdir -p /opt/gnu-mcu-eclipse/
-  sudo cp -r gcc-arm-none-eabi*/ /opt/gnu-mcu-eclipse/arm-none-eabi-gcc/
+  sudo mkdir -p /opt/gnuarmemb/
+  sudo cp -r gcc-arm-none-eabi*/ /opt/gnuarmemb
   ```
 1. Add binaries to the PATH variable
   ```bash
   # For scripts that define #!/bin/bash
-  echo 'PATH="$PATH:/opt/gnu-mcu-eclipse/arm-none-eabi-gcc/bin"' >> ~/.bashrc
+  echo 'PATH="$PATH:/opt/gnuarmemb/bin"' >> ~/.bashrc
   source ~/.bashrc
   ```
 1. Test installation: `which arm-none-eabi-gcc`
@@ -77,7 +99,7 @@ In the Linux download instructions are stored in the archive under `share/doc/gc
 
 
 
-## nRF5 SDK for Thread
+## nRF5 SDK for Thread (and Zigbee)
 1. Download the SDK for *Thread and Zigbee* [Download Page](https://www.nordicsemi.com/Software-and-Tools/Software/nRF5-SDK-for-Thread-and-Zigbee/Download#infotabs)
 2. unzip using `unzip`
 3. set values in `components/toolchain/gcc/Makefile.posix`. My file looks like:
@@ -99,9 +121,13 @@ GNU_PREFIX = arm-none-eabi
 1. Make the .AppImage file executable
 1. Optional: Copy the file to `/usr/local/bin` to add it to your path. Then you can open it from the program search
 1. Open nRF Connect
+1. Install the "Getting Started Assistant"
+1. Open the "Getting Started Assistant" and follow all the steps therein.
+The "variables" on the right hand side should be set to:
+  - GnuArmEmb_path: `/opt/gnuamremb`
+  - sourcecode_root: `~/repositories`
+  - ncs_tag: `v1.2.0` **and** you need to `git checkout v1.2.0` and `west update` in the nrf repo.
 1. Install the "Programmer" App (found in the "APPS" tab)
-1. Click the dropdown menu for Programmer and select "Create Shortcut".
-This will add a shortcut to your desktop, which will be useful when flashing the Dongles.
 
 ### References
 - [User Guide](https://infocenter.nordicsemi.com/pdf/nRF_Connect_Programmer_User_Guide_v1.1.pdf)
@@ -113,6 +139,7 @@ This will add a shortcut to your desktop, which will be useful when flashing the
 ```bash
 pip3 install --upgrade pip
 pip3 install nrfutil
+python -m pip install nrfutil
 ```
 ### Did it work?
 ```bash
