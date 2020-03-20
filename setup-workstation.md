@@ -91,6 +91,23 @@ GNU_PREFIX = arm-none-eabi
 - [Documentation](https://infocenter.nordicsemi.com/topic/struct_sdk/struct/sdk_thread_zigbee_latest.html)
 
 
+
+## nRF Connect
+- Necessary to program the Dongle because the Dongle does not have an onboard debugger
+
+1. [Download](https://www.nordicsemi.com/Software-and-Tools/Development-Tools/nRF-Connect-for-desktop)
+1. Make the .AppImage file executable
+1. Optional: Copy the file to `/usr/local/bin` to add it to your path. Then you can open it from the program search
+1. Open nRF Connect
+1. Install the "Programmer" App (found in the "APPS" tab)
+1. Click the dropdown menu for Programmer and select "Create Shortcut".
+This will add a shortcut to your desktop, which will be useful when flashing the Dongles.
+
+
+### References
+- [User Guide](https://infocenter.nordicsemi.com/pdf/nRF_Connect_Programmer_User_Guide_v1.1.pdf)
+- [Nordic InfoCenter](https://infocenter.nordicsemi.com/topic/ug_nc_programmer/UG/nrf_connect_programmer/ncp_introduction.html)
+
 # User Permissions
 Make sure your user has permission to access serial port
 ```bash
