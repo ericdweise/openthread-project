@@ -103,10 +103,23 @@ GNU_PREFIX = arm-none-eabi
 1. Click the dropdown menu for Programmer and select "Create Shortcut".
 This will add a shortcut to your desktop, which will be useful when flashing the Dongles.
 
-
 ### References
 - [User Guide](https://infocenter.nordicsemi.com/pdf/nRF_Connect_Programmer_User_Guide_v1.1.pdf)
 - [Nordic InfoCenter](https://infocenter.nordicsemi.com/topic/ug_nc_programmer/UG/nrf_connect_programmer/ncp_introduction.html)
+
+
+
+## nrfutil
+```bash
+pip3 install --upgrade pip
+pip3 install nrfutil
+```
+### Did it work?
+```bash
+which nrfutil
+```
+
+
 
 # User Permissions
 Make sure your user has permission to access serial port
