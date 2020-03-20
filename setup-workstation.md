@@ -76,27 +76,6 @@ In the Linux download instructions are stored in the archive under `share/doc/gc
   ```
 
 
-### Configuring SEGGER J-Link software on Linux
-(Copied from the [Nordic infocenter](https://infocenter.nordicsemi.com/topic/sdk_tz_v4.0.0/thread_zigbee__intro.html))
-
-To either disable the MSD (Mass Storage Device) or force the HWFC (Hardware Flow Control):
-
-**Note**, the documentation says this is for Windows and Linux, but might only work for one.
-
-1. Connect the NRF52810_XXAA, NRF52833_XXAA, or NRF52840_XXAA board to your machine with a USB cable.
-2. Run JLinkExe to connect to the target. For example, for NRF52810_XXAA:
-    ```
-    JLinkExe -device NRF52810_XXAA -if SWD -speed 4000 -autoconnect 1 -SelectEmuBySN [SEGGER_ID]
-    ```
-3. Run the following commands:
-    - To disable the MSD:
-    `MSDDisable`
-    - To force the HWFC:
-    `SetHWFC Force`
-4. Power cycle the board using the on/off Power switch.
-
-To enable the MSD, you can repeat the first four steps above and then run the following command: MSDEnable.
-
 
 ## nRF5 SDK for Thread
 1. Download the SDK for *Thread and Zigbee* [Download Page](https://www.nordicsemi.com/Software-and-Tools/Software/nRF5-SDK-for-Thread-and-Zigbee/Download#infotabs)
