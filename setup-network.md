@@ -28,21 +28,7 @@ make -f examples/Makefile-nrf52840 JOINER=1 USB=1 BOOTLOADER=USB
 arm-none-eabi-objcopy -O ihex output/nrf52840/bin/ot-cli-ftd output/nrf52840/bin/ot-cli-ftd.hex
 ```
 
-## Flash with nrfjprog
-1. Plug the dongle into your workstation.
-Make sure that no other devices are plugged in.
-Otherwise you will need to determine which tty shell is connected to the Dongle.
-1. Press the Reset Button.
-The Red LED should start pulsing slowly.
-The following steps assume it is `/dev/ttyACM0`
-1.
-
 ## Flash with nRF Connect
-### NOTE
-I didn't get this to work.
-My nRF Connect wouldn't read the Dongle.
-See **Flash with nrfjprog** instead.
-
 Flashing has to be done using the
 1. Plug the dongle into your workstation.
 Make sure that no other devices are plugged in.
@@ -58,7 +44,6 @@ Let it sit until the
 
 ## Operation
 1. plug into usb power and wait...?
-
 
 
 # Network Co-Processor (NCP) Using the Dev. Kit
@@ -111,12 +96,12 @@ You will need to plug it back in **using the other microusb port** later.
 - [Running the Docker Container](https://openthread.io/guides/border-router/docker/run)
 
 ## Steps
-### Pull Container
+1. Pull Container
 ```bash
 sudo docker pull openthread/otbr:latest
 ```
 
-### Attach Dev Kit
+1. Attach Dev Kit
 Plug the microusb cable into the **long side** of the Dev Kit.
 Make sure that the serial port attaches correctly:
 ```bash
@@ -126,13 +111,14 @@ should return
 ```
 crw-rw----  1 root  dialout 166,     0 Mar 19 16:34 ttyACM0
 ```
-If it is a directory you need to unplug the device and delete ttyACM0
+If there is no output then the board isn't connecting over USB.
+If it is a directory you need to unplug the device and delete `/dev/ttyACM0`.
+NOTE: On other platforms the serial shell might not be `ttyACM[0-9]`
 
-### Run
+1. Run
 To connect the NCP you mount the correct shell to the Docker container as a shared volume.
 The shell should be something like `/dev/ttyACM[0-9]`, but might be different on different distros.
 For example, on my Debian 9.0 computer the shell is `/dev/ttyS[0-9]`.
-
 ```bash
 sudo docker run --sysctl "net.ipv6.conf.all.disable_ipv6=0 \
     net.ipv4.conf.all.forwarding=1 \
@@ -143,9 +129,10 @@ sudo docker run --sysctl "net.ipv6.conf.all.disable_ipv6=0 \
     --ncp-path /dev/ttyACM0
 ```
 
-### Did It Work?
+1. Did It Work?
 If you see the following printed to STDOUT:
 ```
 otbr-agent[221]: Border router agent started.
 ```
 Then it worked!
+Do not close the terminal or stop the Docker instance.
