@@ -147,6 +147,10 @@ which nrfutil
 ```
 
 
+## nrf-udev
+Download and install the most recent nrf-udev from [GitHub](https://github.com/nordicsemiconductor/nrf-udev/releases)
+
+
 
 # User Permissions
 Make sure your user has permission to access serial port
