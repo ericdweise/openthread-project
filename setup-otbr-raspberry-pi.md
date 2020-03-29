@@ -245,16 +245,16 @@ sudo reboot
 The Raspberry Pi should be running a WiFi Access Point called `BorderRouter-AP`.
 The Password is `12345678`.
 Join this using another computer.
-You will no longer be able to ssh into the Raspberry pi.
+
+To ssh into the pi now use the address `192.168.1.2`
 
 
-# Start the Thread Network
-1. Find the ipv4 address of the Pi:
-  - If the Pi is plugged in to the ethernet use `eth0` inet address.
-  - If the Pi is broadcasting using WiFi then use the `wlan0` inet address.
-1. On another computer on the same network open a web browser and put the ip address found in previous step into the URL bar.
-1. Go to the "Form" Page
-1. Configure any
+# Forming the Thread Network
+### TODO:
+https://openthread.io/guides/border-router/external-commissioning#manual
+1. On the new computer open a webbrowser navigate to `192.168.1.2`.
+1. Go to the "Join" tab
+1. Join the network
 
 
 # References
