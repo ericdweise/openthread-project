@@ -11,11 +11,7 @@ Linux ideapad 5.3.0-42-generic #34~18.04.1-Ubuntu SMP Fri Feb 28 13:42:26 UTC 20
 
 ## APT Packages
 Packages that can be installed by aptitude:
-- GCC
-- libgconf
-- screen
-- libreadline
-- DTC
+
 ```bash
 sudo apt install -y \
     gcc \
@@ -38,21 +34,6 @@ sudo apt install -y \
     file \
     make \
     gcc-multilib
-
-```
-
-## Install Docker
-```bash
-sudo apt install -y apt-transport-https ca-certificates curl gnupg-agent software-properties-common
-
-curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
-sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
-
-sudo apt update
-sudo apt install -y docker-ce docker-ce-cli containerd.io
-
-systemctl status docker
-sudo docker run hello-world
 ```
 
 
@@ -64,6 +45,7 @@ sudo dpkg --force-overwrite -i JLink_Linux_*.deb
 
 
 ## GNU ARM Embedded Toolchain
+Used to compile binaries.
 1. [Download package](https://developer.arm.com/tools-and-software/open-source-software/developer-tools/gnu-toolchain/gnu-rm/downloads)
 1. Decompress
   ```bash
@@ -87,35 +69,39 @@ In the Linux download instructions are stored in the archive under `share/doc/gc
 
 
 ## nRF Command Line tools
+Install `nrfjprog`
 1. [Download](https://www.nordicsemi.com/Software-and-tools/Development-Tools/nRF-Command-Line-Tools/Download#infotabs)
-2. decompress
+1. decompress
   ```bash
   tar -xzvf nRF-Command-Line-Tools*
   ```
-3. Install nRFTools
-  ```
+1. Install nRFTools
+  ```bash
   sudo dpkg -i --force-overwrite nRF-Command-Line-Tools_*.deb
   ```
 
 
-
 ## nRF5 SDK for Thread (and Zigbee)
+The code that will be flashed to the PCA10059 "Dongle".
 1. Download the SDK for *Thread and Zigbee* [Download Page](https://www.nordicsemi.com/Software-and-Tools/Software/nRF5-SDK-for-Thread-and-Zigbee/Download#infotabs)
-2. unzip using `unzip`
-3. set values in `components/toolchain/gcc/Makefile.posix`. My file looks like:
-```bash
+1. unzip using `unzip`
+1. Find your `GNU_VERSION`:
+    ```bash
+    arm-none-eabi-gcc --version
+    ```
+1. set values in `components/toolchain/gcc/Makefile.posix`. My file looks like:
+```
 GNU_INSTALL_ROOT = /home/ender/thread/gcc-arm-none-eabi-9-2019-q4-major/bin/  # Where GNU ARM Embedded Toolchain was installed
-GNU_VERSION = 9.2.1   # get from running arm-none-eabi-gcc --version
+GNU_VERSION = 9.2.1
 GNU_PREFIX = arm-none-eabi
 ```
 
-### Notes
-- [Documentation](https://infocenter.nordicsemi.com/topic/struct_sdk/struct/sdk_thread_zigbee_latest.html)
-
+### References
+- [SDK Documentation](https://infocenter.nordicsemi.com/topic/struct_sdk/struct/sdk_thread_zigbee_latest.html)
 
 
 ## nRF Connect
-- Necessary to program the Dongle because the Dongle does not have an onboard debugger
+Necessary to program the Dongle because the Dongle does not have an onboard debugger.
 
 1. [Download](https://www.nordicsemi.com/Software-and-Tools/Development-Tools/nRF-Connect-for-desktop)
 1. Make the .AppImage file executable
@@ -129,10 +115,10 @@ The "variables" on the right hand side should be set to:
   - ncs_tag: `v1.2.0` **and** you need to `git checkout v1.2.0` and `west update` in the nrf repo.
 1. Install the "Programmer" App (found in the "APPS" tab)
 
+
 ### References
 - [User Guide](https://infocenter.nordicsemi.com/pdf/nRF_Connect_Programmer_User_Guide_v1.1.pdf)
 - [Nordic InfoCenter](https://infocenter.nordicsemi.com/topic/ug_nc_programmer/UG/nrf_connect_programmer/ncp_introduction.html)
-
 
 
 ## nrfutil
@@ -141,6 +127,7 @@ pip3 install --upgrade pip
 pip3 install nrfutil
 python -m pip install nrfutil
 ```
+
 ### Did it work?
 ```bash
 which nrfutil
@@ -151,12 +138,29 @@ which nrfutil
 Download and install the most recent nrf-udev from [GitHub](https://github.com/nordicsemiconductor/nrf-udev/releases)
 
 
+## Install Docker
+This is required to run the otbr-posix Docker container.
+```bash
+sudo apt install -y apt-transport-https ca-certificates curl gnupg-agent software-properties-common
+
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
+
+sudo apt update
+sudo apt install -y docker-ce docker-ce-cli containerd.io
+
+systemctl status docker
+sudo docker run hello-world
+```
+
+
 
 # User Permissions
 Make sure your user has permission to access serial port
 ```bash
 sudo adduser $(whoami) dialout
 ```
+
 
 
 # Clone Repositories
