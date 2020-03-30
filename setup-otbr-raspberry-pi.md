@@ -241,20 +241,38 @@ sudo sed -i '/net.ipv4.ip_forward/c\net.ipv4.ip_forward=1' /etc/sysctl.conf
 sudo reboot
 ```
 
-## Join the New Network
+## Forming the Thread Network
+1. Join the new WiFi Network.
 The Raspberry Pi should be running a WiFi Access Point called `BorderRouter-AP`.
 The Password is `12345678`.
 Join this using another computer.
-
-To ssh into the pi now use the address `192.168.1.2`
-
-
-# Forming the Thread Network
-### TODO:
-https://openthread.io/guides/border-router/external-commissioning#manual
-1. On the new computer open a webbrowser navigate to `192.168.1.2`.
-1. Go to the "Join" tab
-1. Join the network
+1. To ssh into the pi now use:
+```bash
+ssh pi@192.168.1.2
+```
+1. Set the Network Parameters through the NCP
+```bash
+sudo wpanctl setprop Network:PANID 0x1234
+sudo wpanctl setprop Network:XPANID 9988776655443322
+sudo wpanctl setprop Network:Key 11112222333344445555666677778888
+sudo wpanctl setprop Thread:OnMeshPrefixes "fd11:22::"
+```
+1. Generate PreShared key
+```bash
+cd ~/ot-br-posix/tools
+# ./pskc <PASSPHRASE> <EXTPANID> <NETWORK_NAME>
+./pskc 15243 9988776655443322 WeiseNet | xargs sudo wpanctl setprop Network:PSKc --data
+```
+1. Start Network
+```bash
+sudo wpanctl form "WeiseNet"
+```
+1. Confirm the network configuration
+```bash
+sudo wpanctl status
+sudo wpanctl getprop Thread:OnMeshPrefixes
+sudo wpanctl getprop Network:PSKc
+```
 
 
 # References
