@@ -43,7 +43,6 @@ The Red LED should start pulsing slowly.
 
 
 # Start the Thread Network
-[Reference](https://openthread.io/guides/build/commissioning)
 1. Start the **COMMISSIONER** device and attach a screen session.
   ```bash
   screen /dev/ttyACM0
@@ -119,20 +118,3 @@ From the **COMMISSIONER**
 router table
 child table
 ```
-
-
-
-# References
-[Programming the nRF52840 Dongle](https://infocenter.nordicsemi.com/topic/ug_nrf52840_dongle/UG/nrf52840_Dongle/programming.html)
-
-[nRF52840 Dongle User Guide](https://infocenter.nordicsemi.com/pdf/nRF52840_Dongle_User_Guide_v1.1.pdf)
-
-[Nordic Tutorial on Programming Dongle](https://devzone.nordicsemi.com/nordic/short-range-guides/b/getting-started/posts/nrf52840-dongle-programming-tutorial)
-
-[DevZone - replacing stock bootloader](https://devzone.nordicsemi.com/f/nordic-q-a/39185/pca10059-replacing-stock-bootloader-with-adafruit-uf2-using-usb-dfua-signature-i-can-generate-a-zip-file-with-nrfutil-but-what-key-should-i-use-i-tried-to-use-just-a-private-key-and-flash-that-generated-packet-with-nrfutil-bu)
-
-[DevZone - flashing dongle tutorial](https://devzone.nordicsemi.com/nordic/short-range-guides/b/getting-started/posts/nrf52840-dongle-programming-tutorial)
-
-[DevZone - Getting Started with Nordic's Secure DFU Bootloader](https://devzone.nordicsemi.com/nordic/nordic-blog/b/blog/posts/getting-started-with-nordics-secure-dfu-bootloader)
-
-[DevZone - Dongle Programming Tutorial](https://devzone.nordicsemi.com/nordic/short-range-guides/b/getting-started/posts/nrf52840-dongle-programming-tutorial)

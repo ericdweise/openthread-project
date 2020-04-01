@@ -130,7 +130,6 @@ joiner start M0untWH!tn3y
 
 # Form Thread Network
 For the record, I can't get this to work.
-[Reference](https://openthread.io/guides/border-router/external-commissioning#manual)
 1. Set the Network Parameters through the NCP
 ```bash
 sudo wpanctl setprop Network:PANID 0x1234
@@ -154,11 +153,3 @@ sudo wpanctl status
 sudo wpanctl getprop Thread:OnMeshPrefixes
 sudo wpanctl getprop Network:PSKc
 ```
-
-
-# References
-[OpenThread - Raspberry Pi 3B](https://openthread.io/guides/border-router/raspberry-pi-3b)
-
-[OpenThread - Build otbr-posix](https://openthread.io/guides/border-router/build)
-
-[OpenThread CLI Reference](https://embarc.org/embarc_osp/doc/build/html/example/example/baremetal/openthread/cli/OT_CLI.html#commissioner-start-provisioningurl)

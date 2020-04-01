@@ -7,11 +7,6 @@ How to configure devices and set up the network
 - Every node will be put programmed as a Full Thread Device (FTD)
 - Here I use the 'cli' example provided by OpenThread
 
-## References
-- [Programming the nRF52840 Dongle](https://infocenter.nordicsemi.com/topic/ug_nrf52840_dongle/UG/nrf52840_Dongle/programming.html)
-- [nRF52840 Dongle User Guide](https://infocenter.nordicsemi.com/pdf/nRF52840_Dongle_User_Guide_v1.1.pdf)
-- [Nordic Tutorial on Programming Dongle](https://devzone.nordicsemi.com/nordic/short-range-guides/b/getting-started/posts/nrf52840-dongle-programming-tutorial)
-
 ## Compile
 1. Change to the OpenThread Repository
 ```bash
@@ -52,10 +47,6 @@ Let it sit until the
 - Works as the Commissioner for the Border Router
 - Using the NCP provided by the OpenThread Repository
 
-## References
-- Follows instructions for the OpenThread [Build and Flash NCP](https://openthread.io/guides/border-router/build#build-and-flash-ncp)
-- [Instructions for compiling](https://openthread.io/platforms/co-processor/firmware)
-
 ## Compile
 Based on the OpenThread implementation.
 ```bash
@@ -87,13 +78,6 @@ You will need to plug it back in **using the other microusb port** later.
 
 # Border Router
 - Docker container running on workstation
-- Instructions and overview can be found [here](https://openthread.io/guides/border-router/docker)
-- Instructions on running Docker and NCP as full Base Station found [here]()
-
-## References
-- [OpenThread Border Router Guide](https://openthread.io/guides/border-router/docker).
-    Use the Physical NCP instructions
-- [Running the Docker Container](https://openthread.io/guides/border-router/docker/run)
 
 ## Steps
 1. Pull Container
