@@ -125,7 +125,7 @@ The "variables" on the right hand side should be set to:
 ```bash
 pip3 install --upgrade pip
 pip3 install nrfutil
-python -m pip install nrfutil
+sudo python -m pip install nrfutil
 ```
 
 ### Did it work?
