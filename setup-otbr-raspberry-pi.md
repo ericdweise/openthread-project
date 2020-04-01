@@ -23,8 +23,7 @@ sudo dd \
 1. `touch` a file named `ssh` in the root of the boot partition on the sd card.
 1. Plug the SD Card into the Raspberry Pi and turn it on
 
-
-# Install OTBR-posix
+# Log in and configure Pi
 Log into the Pi.
 I prefer to do this over SSH.
 The starting credentials are:
@@ -32,28 +31,44 @@ The starting credentials are:
 user: pi
 pass: raspberry
 ```
+Change default Password
+```bash
+passwd
+```
+
+
+# Install OTBR-posix
 1. Install dependencies
 ```bash
 sudo apt update
 sudo apt upgrade -y
-sudo apt install -y git vim
+sudo apt install -y git vim tmux libreadline-dev
 ```
-
-
-# Build OTBR
+1. Start a new tmux session
+```bash
+tmux new
+```
+1.  Build OTBR
 ```bash
 git clone https://github.com/openthread/ot-br-posix
 cd ot-br-posix
+git checkout thread-br-certified-20180819
 ./script/bootstrap
-./script/setup
+sed -i '/NETWORK_MANAGER/c\NETWORK_MANAGER=0' examples/platforms/raspbian/default
+NETWORK_MANAGER=0 ./script/setup
 ```
-Then reboot the Pi `sudo reboot`
+
+
+#  Configure NAT
+Maybe do this?
+
+https://openthread.io/guides/border-router/access-point#configure-nat
 
 
 # Attach NCP
 1. Plug the NCP device into the Pi using the microUSB port on the long side of the Dev Kit
 1. Find the serial port the NCP attaches to.
-The next step assumes it is `/def/tty`
+The next step assumes it is `/dev/ttyACM0`
 1. Edit wpantund.conf: `sudo vi /etc/wpantund.conf`
   - Change
     ```
@@ -68,204 +83,70 @@ The next step assumes it is `/def/tty`
     Config:TUN:NetworkName wpan0
     ```
 1. Restart services
-```bash
-sudo systemctl restart avahi-daemon
-sudo systemctl restart otbr-agent
-sudo systemctl restart otbr-web
-sudo systemctl restart wpantund
-```
+  ```bash
+  sudo systemctl restart avahi-daemon
+  sudo systemctl restart otbr-agent
+  sudo systemctl restart otbr-web
+  sudo systemctl restart wpantund
+  ```
+1. Restart
+  ```bash
+  sudo reboot
+  ```
 1. Verify the NCP is connected
-```bash
-sudo wpanctl status
-```
-should return
-```
-wpan0 => [
-	"NCP:State" => "offline"
-	"Daemon:Enabled" => true
-	"NCP:Version" => "OPENTHREAD/20191113-00443-g133ec09b; NRF52840; Mar 27 2020 20:31:41"
-	"Daemon:Version" => "0.08.00d (/b161410; Mar 29 2020 04:06:01)"
-	"Config:NCP:DriverName" => "spinel"
-	"NCP:HardwareAddress" => [F4CE36F64AF8185C]
-]
-```
-Make sure that `NCP:State` is **not** `uninitialized`
-
-
-# Configure Pi to Start Network
-1. Install Packages:
-```bash
-sudo apt install -y hostapd dnsmasq tayga
-```
-
-## Configure IPv4
-1. Block dhcp from using wlan0:
-```bash
-echo 'denyinterfaces wlan0' | sudo tee -a /etc/dhcpcd.conf
-```
-1. Configure static IPv4 addresses on the wlan0 interface:
-```bash
-echo 'allow-hotplug wlan0
-iface wlan0 inet static
-    address 192.168.1.2
-    netmask 255.255.255.0
-    network 192.168.1.0
-    broadcast 192.168.1.255' | sudo tee /etc/network/interfaces.d/wlan0
-```
-
-## Configure hostapd
-1. Configure hostapd
   ```bash
-  printf '# The Wi-Fi interface configured for static IPv4 addresses
-  interface=wlan0\n
-  # Use the 802.11 Netlink interface driver
-  driver=nl80211\n
-  # The user-defined name of the network
-  ssid=BorderRouter-AP\n
-  # Use the 2.4GHz band
-  hw_mode=g\n
-  # Use channel 6
-  channel=6\n
-  # Enable 802.11n
-  ieee80211n=1\n
-  # Enable WMM
-  wmm_enabled=1\n
-  # Enable 40MHz channels with 20ns guard interval
-  ht_capab=[HT40][SHORT-GI-20][DSSS_CCK-40]\n
-  # Accept all MAC addresses
-  macaddr_acl=0\n
-  # Use WPA authentication
-  auth_algs=1\n
-  # Require clients to know the network name
-  ignore_broadcast_ssid=0\n
-  # Use WPA2
-  wpa=2\n
-  # Use a pre-shared key
-  wpa_key_mgmt=WPA-PSK\n
-  # The network passphrase
-  wpa_passphrase=12345678\n
-  # Use AES, instead of TKIP
-  rsn_pairwise=CCMP\n' | sudo tee /etc/hostapd/hostapd.conf
+  sudo wpanctl status
   ```
-1. Enable DAEMON_CONF
-  ```bash
-  echo 'DAEMON_CONF="/etc/hostapd/hostapd.conf"' | sudo tee -a /etc/default/hostapd
+  should return
   ```
-1. Bootstrap hostapd on reboot:
-  ```bash
-  sudo systemctl unmask hostapd
-  sudo systemctl restart hostapd
+  wpan0 => [
+  	"NCP:State" => "offline"
+  	"Daemon:Enabled" => true
+  	"NCP:Version" => "OPENTHREAD/20191113-00443-g133ec09b; NRF52840; Mar 27 2020 20:31:41"
+  	"Daemon:Version" => "0.08.00d (/b161410; Mar 29 2020 04:06:01)"
+  	"Config:NCP:DriverName" => "spinel"
+  	"NCP:HardwareAddress" => [F4CE36F64AF8185C]
+  ]
   ```
-1. Add parameters to hostapd.services
+  Make sure that `NCP:State` is **not** `uninitialized`
+
+
+# Join Network
+This section assumes that the thread network has already been started on one of the FTD devices.
+1. Run wpanctl in interactive mode
 ```bash
-printf '[Unit]
-Description=Hostapd IEEE 802.11 Access Point
-After=sys-subsystem-net-devices-wlan0.device
-BindsTo=sys-subsystem-net-devices-wlan0.device\n
-[Service]
-Type=forking
-PIDFile=/var/run/hostapd.pid
-ExecStart=/usr/sbin/hostapd -B /etc/hostapd/hostapd.conf -P /var/run/hostapd.pid\n
-[Install]
-WantedBy=multi-user.target\n' | sudo tee /etc/systemd/system/hostapd.service
+sudo wpanctl -I wpan0
 ```
-1. Edit rc.local
-```bash
-sudo sed -i '/exit 0/c\sudo service hostapd start' /etc/rc.local
-echo 'exit 0' | sudo tee -a /etc/rc.local
+1. Scan for the Thread network
+```
+scan
+```
+1. Join the network
+```
+join --type router --panid 0x1234 --xpanid 0123456789012345 --channel 17 --name weisenet
+joiner start M0untWH!tn3y
 ```
 
 
-## Configure DNSMASQ
-1. Backup original configuration file
-```bash
-sudo mv /etc/dnsmasq.conf /etc/dnsmasq.conf.orig
-```
-1. Make new configuration
-```bash
-printf '# The Wi-Fi interface configured for static IPv4 addresses
-interface=wlan0\n
-# Explicitly specify the address to listen on
-listen-address=192.168.1.2\n
-# Bind to the interface to make sure we arent sending things elsewhere
-bind-interfaces\n
-# Forward DNS requests to the Google DNS
-server=8.8.8.8\n
-# Dont forward short names
-domain-needed\n
-# Never forward addresses in non-routed address spaces
-bogus-priv\n
-# Assign IP addresses between 192.168.1.50 and 192.168.1.150 with a 12 hour lease time
-dhcp-range=192.168.1.50,192.168.1.150,12h\n' | sudo tee /etc/dnsmasq.conf
-```
-1. Start bind9 after dnsmasq
-```bash
-sudo sed -i '/After=/c\After=network.target dnsmasq.service' /lib/systemd/system/bind9.service
-```
-
-
-## Configure NAT
-1. Edit tayga configuration file
-```bash
-echo 'prefix 64:ff9b::/96
-dynamic-pool 192.168.255.0/24
-ipv6-addr 2001:db8:1::1
-ipv4-addr 192.168.255.1' | sudo tee -a /etc/tayga.conf
-```
-1. Enable tayga
-```bash
-sudo sed -i '/RUN/c\RUN="yes"' /etc/default/tayga
-```
-1. Enable IPv4 and IPv6 forwarding
-```bash
-sudo sh -c "echo 1 > /proc/sys/net/ipv4/ip_forward"
-sudo sh -c "echo 1 > /proc/sys/net/ipv6/conf/all/forwarding"
-```
-1. Ensure IPv4 forwarding remains enabled after reboot
-```bash
-sudo sed -i '/net.ipv4.ip_forward/c\net.ipv4.ip_forward=1' /etc/sysctl.conf
-```
-1. Configure NAT with iptables
-  ```bash
-  sudo iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE
-  sudo iptables -A FORWARD -i eth0 -o wlan0 -m state --state RELATED,ESTABLISHED -j ACCEPT
-  sudo iptables -A FORWARD -i wlan0 -o eth0 -j ACCEPT
-  sudo sh -c "iptables-save > /etc/iptables.ipv4.nat"
-
-  sudo sed -i '/exit 0/c\iptables-restore < /etc/iptables.ipv4.nat' /etc/rc.local
-  echo 'exit 0' | sudo tee -a /etc/rc.local
-  ```
-
-## Reboot
-```bash
-sudo reboot
-```
-
-## Forming the Thread Network
-1. Join the new WiFi Network.
-The Raspberry Pi should be running a WiFi Access Point called `BorderRouter-AP`.
-The Password is `12345678`.
-Join this using another computer.
-1. To ssh into the pi now use:
-```bash
-ssh pi@192.168.1.2
-```
+# Form Thread Network
+For the record, I can't get this to work.
+[Reference](https://openthread.io/guides/border-router/external-commissioning#manual)
 1. Set the Network Parameters through the NCP
 ```bash
 sudo wpanctl setprop Network:PANID 0x1234
 sudo wpanctl setprop Network:XPANID 9988776655443322
 sudo wpanctl setprop Network:Key 11112222333344445555666677778888
-sudo wpanctl setprop Thread:OnMeshPrefixes "fd11:22::"
+sudo wpanctl config-gateway -d "fd11:22::"
 ```
 1. Generate PreShared key
 ```bash
 cd ~/ot-br-posix/tools
 # ./pskc <PASSPHRASE> <EXTPANID> <NETWORK_NAME>
-./pskc 15243 9988776655443322 WeiseNet | xargs sudo wpanctl setprop Network:PSKc --data
+./pskc 123456 9988776655443322 weisenet | xargs sudo wpanctl setprop Network:PSKc --data
 ```
 1. Start Network
 ```bash
-sudo wpanctl form "WeiseNet"
+sudo wpanctl form "weisenet"
 ```
 1. Confirm the network configuration
 ```bash
@@ -279,3 +160,5 @@ sudo wpanctl getprop Network:PSKc
 [OpenThread - Raspberry Pi 3B](https://openthread.io/guides/border-router/raspberry-pi-3b)
 
 [OpenThread - Build otbr-posix](https://openthread.io/guides/border-router/build)
+
+[OpenThread CLI Reference](https://embarc.org/embarc_osp/doc/build/html/example/example/baremetal/openthread/cli/OT_CLI.html#commissioner-start-provisioningurl)

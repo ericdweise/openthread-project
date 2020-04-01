@@ -8,17 +8,15 @@ I use the nRF52840 Dongle (PCS10059) for This.
 # Device Setup
 ## Modify Start Address
 Necessary to not overwrite the bootloader
-
 ```bash
 vi ~/repositories/openthread/.....
 ```
 
 
 ## Compile
-1. Compile a USB, Joiner node
+Compile a USB, Joiner node
 ```bash
 cd ~/repositories/openthread/
-
 make -f examples/Makefile-nrf52840 clean
 make -f examples/Makefile-nrf52840 COMMISSIONER=1 USB=1 BOOTLOADER=USB
 ```
@@ -39,51 +37,51 @@ Otherwise you will need to determine which tty shell is connected to the Dongle.
 The Red LED should start pulsing slowly.
 1. Open the nRF Connect "Programmer" App.
 1. "Select Device" (upper left of the window).
-It can take a few minutes for the Programmer to read the device memory.
-Let it sit until the
 1. "Add HEX file" (menu on the top right)
 1. "Write" to Dongle (menu on the bottom right)
 
 
 
 # Start the Thread Network
+[Reference](https://openthread.io/guides/build/commissioning)
 1. Start the **COMMISSIONER** device and attach a screen session.
-```bash
-screen /dev/ttyACM0
-```
+  ```bash
+  screen /dev/ttyACM0
+  ```
 1. Set Thread Network Parameters
-```
-ifconfig up
-
-dataset init new
-dataset networkname eweise
-dataset masterkey 00000000000000000000000000000000
-dataset panid 0x1234
-dataset extpanid 0123456789012345
-dataset channel 17
-dataset
-dataset commit active
-```
+  ```
+  ifconfig up
+  dataset init new
+  dataset networkname weisenet
+  dataset masterkey 00000000000000000000000000000000
+  dataset panid 0x1234
+  dataset extpanid 0123456789012345
+  dataset channel 17
+  dataset
+  dataset commit active
+  ```
 1. Start the Network
-```
-ifconfig up
-thread start
-rloc16
-```
+  ```
+  ifconfig up
+  thread start
+  ```
 1. Start the Commissioner Role
-```
-commissioner start
-```
+  ```
+  commissioner start
+  ```
+1. Allow any device to join with a passkey:
+  ```
+  commissioner joiner add * M0untWH!tn3y
+  ```
 
 
 
 # Joining the Network
-Use the **COMMISSIONER** Node to add a **JOINER** device to the
-1. Plug **JOINER** Dongle into computer
-1. Attach to the device using screen:
-  ```bash
-  screen /dev/ttyACM[0-1]
-  ```
+Use the **COMMISSIONER** Node to add a **JOINER** device to the weisenet network.
+Start by plugging the device into the workstation and accessing the CLI by either:
+- `screen /dev/ttyACM0` if this is a regular
+
+Then, follow these steps:
 1. Start networking
 ```
 ifconfig up
@@ -91,21 +89,23 @@ ifconfig up
 1. scan for the network to see if you can join
 ```
 > scan
-TODO: Add output
+__|Joinable | NetworkName        | PAN ID | Ch | XPanID           | HWAddr           | RSSI
+__|---------+--------------------+--------+----+------------------+------------------+------
+1 |      NO | "weisenet"         | 0x1234 | 17 | 0123456789012345 | 1E7A8FF9ABE8E72A |  -59
 ```
-1. Find
+1. Find EUI of Joiner
 ```
-> eui
+> eui64
 2f57d222545271f1
 ```
-1. From the **COMMISSIONER** device add the new device using `commissioner joiner add <EUI64> <NETWORK_NAME>`
+1. From the **COMMISSIONER** device add the new device
 ```
-commissioner joiner add <EUI64> eweise
+commissioner joiner add <EUI64> <PSKc>
 ```
 1. From the **JOINER** join the network
 ```
 ifconfig up
-joiner start eweise
+joiner start weisenet M0untWH!tn3y
 thread start
 ```
 1. Verify that the **JOINER** is part of the network.

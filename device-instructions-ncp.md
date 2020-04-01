@@ -8,7 +8,8 @@ Based on the OpenThread implementation.
 ```bash
 cd ~/repositories/openthread
 make -f examples/Makefile-nrf52840 clean
-make -f examples/Makefile-nrf52840 JOINER=1 USB=1
+make -f examples/Makefile-nrf52840 BORDER_AGENT=1 BORDER_ROUTER=1 COMMISSIONER=1 UDP_FORWARD=1 USB=1
+# make -f examples/Makefile-nrf52840 JOINER=1 USB=1
 ```
 
 
