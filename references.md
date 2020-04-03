@@ -7,15 +7,11 @@ Some high level resources that I found helpful.
 
 [Border Router with Docker](https://openthread.io/guides#border_router_with_docker)
 
-[Hardware Code Lab](https://openthread.io/guides#hardware_codelab)
-- Flash OpenThread on Nordic nRF52840 development boards
-- Build a real Thread network
-- Authenticate Thread nodes with Commissioning
-- Use the OpenThread CLI for Multicast and UDP
+[Hardware Code Lab](https://codelabs.developers.google.com/codelabs/openthread-hardware/#0)
 
 [Commissioning the Network](https://openthread.io/guides/build/commissioning)
 
-[OpenThread CLI Reference](https://embarc.org/embarc_osp/doc/build/html/example/example/baremetal/openthread/cli/OT_CLI.html#commissioner-start-provisioningurl)
+[OpenThread CLI Reference](https://embarc.org/embarc_osp/doc/build/html/example/example/baremetal/openthread/cli/OT_CLI.html)
 
 [Instructions for compiling NCP](https://openthread.io/platforms/co-processor/firmware)
 
@@ -30,12 +26,11 @@ Some high level resources that I found helpful.
 
 [Nordic's Guide to the OTBR](https://infocenter.nordicsemi.com/topic/com.nordic.infocenter.thread_zigbee.v3.0.0/thread_border_router.html)
 
-[Reference](https://openthread.io/guides/border-router/external-commissioning#manual)
+[Forming the Network from the NCP](https://openthread.io/guides/border-router/external-commissioning#manual)
 
 [OTBR on a Raspberry Pi 3B](https://openthread.io/guides/border-router/raspberry-pi-3b)
 
-[DockerHub OpenThread](https://hub.docker.com/u/openthread/)
-- I never could get this configured correctly.
+[DockerHub OpenThread](https://hub.docker.com/u/openthread/) (I couldn't get this working.)
 
 
 
