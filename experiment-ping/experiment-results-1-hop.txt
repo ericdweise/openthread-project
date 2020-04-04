@@ -452,9 +452,7 @@
 256 bytes from fde8:86a1:38c4:2c2e:1341:9f82:d486:7f57: icmp_seq=1200 hlim=64 time=41ms
 256 bytes from fde8:86a1:38c4:2c2e:1341:9f82:d486:7f57: icmp_seq=1201 hlim=64 time=48ms
 256 bytes from fde8:86a1:38c4:2c2e:1341:9f82:d486:7f57: icmp_seq=1202 hlim=64 time=38ms
-
-> ping fde8:86a1:38c4:2c2e:1341:9f82:d486:7f57 248 50 1
-> 256 bytes from fde8:86a1:38c4:2c2e:1341:9f82:d486:7f57: icmp_seq=1203 hlim=64 time=41ms
+256 bytes from fde8:86a1:38c4:2c2e:1341:9f82:d486:7f57: icmp_seq=1203 hlim=64 time=41ms
 256 bytes from fde8:86a1:38c4:2c2e:1341:9f82:d486:7f57: icmp_seq=1204 hlim=64 time=41ms
 256 bytes from fde8:86a1:38c4:2c2e:1341:9f82:d486:7f57: icmp_seq=1205 hlim=64 time=48ms
 256 bytes from fde8:86a1:38c4:2c2e:1341:9f82:d486:7f57: icmp_seq=1206 hlim=64 time=44ms
